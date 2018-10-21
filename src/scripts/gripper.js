@@ -90,25 +90,27 @@ class Gripper_GUI {
         if (err) throw err;
         console.log("Done writing.");
       });
-      // execute solver and parser
-      // const { exec } = require("child_process");
-      // exec(
-      //   '"./clingo blocks_ASP_prog.lp instances.inp > out.inp"',
-      //   {
-      //     cwd: "./Clingo"
-      //   },
-      //   function(err, stdout) {
-      //     exec("./clingo/parser",
-      //     {
-      //       cwd: "./Clingo"
-      //     },
-      //     function(err, stdout) {
-      //       console.log(stdout);
-      //     });
-      //     console.log(stdout);
-      //     alert("Solver completed");
-      //   }
-      // );
+      //execute solver and parser
+      const { exec } = require("child_process").exec;
+      exec(
+        '"./clingo blocks_ASP_prog.lp instances.inp > out.inp"',
+        {
+          cwd: "./Clingo"
+        },
+        function(err, stdout) {
+          exec(
+            "./clingo/parser",
+            {
+              cwd: "./Clingo"
+            },
+            function(err, stdout) {
+              console.log(stdout);
+            }
+          );
+          console.log(stdout);
+          alert("Solver completed");
+        }
+      );
     }
 
     this.resetBlocks();
