@@ -5,36 +5,39 @@ class Gripper_GUI {
     this.fs = require("fs");
   }
 
-  // enable button above selected button
+  // enable button above selected button and concatnate 'block'
+  // placment to string
   addBlock(id) {
     var num, str, initCell;
     if (this.counter > 0) {
-      document.getElementById(id).innerHTML = this.counter;
-      document.getElementById(id).style.background = "#7AB317";
-      document.getElementById(id).style.color = "#A0C55F";
+      if (document.getElementById(id).innerHTML == "") {
+        document.getElementById(id).innerHTML = this.counter;
+        document.getElementById(id).style.background = "#7AB317";
+        document.getElementById(id).style.color = "#A0C55F";
 
-      this.initCell = "initCellHasBlock("; // row, col, block No.
-      this.initStr =
-        this.initStr +
-        initCell +
-        document.getElementById(id).value +
-        "," +
-        this.counter +
-        ")\n";
+        initCell = "initCellHasBlock("; // row, col, block No.
+        this.initStr =
+          this.initStr +
+          initCell +
+          document.getElementById(id).value +
+          "," +
+          this.counter +
+          ").\n";
 
-      this.counter -= 1;
-      num = parseInt(id);
-      num = num + 4;
-      str = num.toString();
-      document.getElementById(str).disabled = false;
+        this.counter -= 1;
+        num = parseInt(id);
+        num = num + 4;
+        str = num.toString();
+        document.getElementById(str).disabled = false;
+      }
     } else {
       alert("Out of blocks!");
     }
   }
 
   /* sets all buttons, radio btn and text
-    * to their defualt values
-    */
+  * to their defualt values
+  */
   setUp() {
     var i, x;
     for (i = 5; i < 25; i++) {
@@ -46,11 +49,10 @@ class Gripper_GUI {
 
   resetBlocks() {
     var i, x;
-
     for (i = 1; i < 25; i++) {
       x = i.toString();
       document.getElementById(x).innerHTML = "";
-      document.getElementById(x).style.background = "#FFBA06";
+      document.getElementById(x).style.background = "transparent";
     }
 
     this.setUp();
@@ -70,21 +72,46 @@ class Gripper_GUI {
   }
 
   executeSolver() {
+    var init_config, goal;
     if (this.counter > 0) {
       alert("Please place 6 blocks!");
     } else {
-      var exec = require("child_process").exec;
-      exec("./clingo blocks_ASP_prog.lp instance_examp.inp > out.inp", function(
-        err,
-        stdout
-      ) {
-        exec("./parser", function(err, stdout) {
-          console.log(stdout);
-        });
-        console.log(stdout);
-        console.log("Solver completed");
+      if (document.getElementById("rb1").checked)
+        goal = document.getElementById("rb1").value;
+      if (document.getElementById("rb2").checked)
+        goal = document.getElementById("rb2").value;
+      if (document.getElementById("rb3").checked)
+        goal = document.getElementById("rb3").value;
+      if (document.getElementById("rb4").checked)
+        goal = document.getElementById("rb4").value;
+
+      init_config = this.initStr + "goalPlatform(" + goal + ").";
+      this.fs.writeFile("./Clingo/instances.inp", init_config, function(err) {
+        if (err) throw err;
+        console.log("Done writing.");
       });
+      // execute solver and parser
+      // const { exec } = require("child_process");
+      // exec(
+      //   '"./clingo blocks_ASP_prog.lp instances.inp > out.inp"',
+      //   {
+      //     cwd: "./Clingo"
+      //   },
+      //   function(err, stdout) {
+      //     exec("./clingo/parser",
+      //     {
+      //       cwd: "./Clingo"
+      //     },
+      //     function(err, stdout) {
+      //       console.log(stdout);
+      //     });
+      //     console.log(stdout);
+      //     alert("Solver completed");
+      //   }
+      // );
     }
+
+    this.resetBlocks();
   }
 }
 

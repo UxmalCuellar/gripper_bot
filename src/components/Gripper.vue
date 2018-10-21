@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-      <h1>GripperBot</h1>
+  <h1>GripperBot</h1>
       <p>Place the blocks.</p>
       <form name="gripperBot" action="/api/data" method="post">
         <div class="container">
@@ -40,7 +40,7 @@
             <input type="radio" id="rb3" name="goal" v-on:click="updatePlatform($event)" value="3">
             <input type="radio" id="rb4" name="goal" v-on:click="updatePlatform($event)" value="4">
           </div>
-          <p type="" id = "platform">Platform 1 selected</p>
+          <p type="" id="platform">Platform 1 selected</p>
           <div class="actions">
             <button type="button" class="solve" v-on:click="executeSolver()" id="solve">Solve</button>
             <button type="button" class="clear" v-on:click="resetBlocks()"  value="clear">Reset</button>
@@ -83,7 +83,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
-  font-size: 40px;
+  font-size: 35px;
   text-align: center;
 }
 
@@ -122,9 +122,9 @@ html {
   top: 0%;
   left: 120%;
   transform: translate(24%, 20%);
-  width: 400px;
+  width: 270px;
   height: 25px;
-  align: centre;
+  align: center;
 }
 
 button {
@@ -151,7 +151,7 @@ button:hover {
 }
 
 button:disabled {
-  background: #ffba06;
+  background: transparent;
   border: none;
 }
 
