@@ -1,4 +1,5 @@
 "use strict";
+global.__basedir = __dirname;
 
 import { app, protocol, BrowserWindow } from "electron";
 import {
