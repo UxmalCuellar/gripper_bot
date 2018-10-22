@@ -1,24 +1,29 @@
+// import { execFile } from "child_process";
 import { exec } from "child_process";
-const execPath = "./clingo blocks_ASP_prog.lp init_config.inp > out.inp";
+// const command1 = "clingo";
+const command1 = "./clingo blocks_ASP_prog.lp init_config.inp > out.inp";
+const command2 = "./parser";
 class Gripper_GUI {
   constructor() {
     this.counter = 6;
     this.initStr = "";
     this.fs = require("fs");
-    this.command = execPath;
+    this.solver = command1;
+    this.parse = command2;
     this.child = {}; // init as null object
     this.running = false;
   }
 
-  // enable button above selected button and concatnate 'block'
-  // placment to string
+  /* enable button above selected button and concatnate 'block'
+   * placment to string
+   */
   addBlock(id) {
     var num, str, initCell;
     if (this.counter > 0) {
       if (document.getElementById(id).innerHTML == "") {
         document.getElementById(id).innerHTML = this.counter;
-        document.getElementById(id).style.background = "#7AB317";
-        document.getElementById(id).style.color = "#A0C55F";
+        document.getElementById(id).style.background = "#0C70A1";
+        document.getElementById(id).style.color = "#B1E0F5";
 
         initCell = "initCellHasBlock("; // row, col, block No.
         this.initStr =
@@ -40,9 +45,7 @@ class Gripper_GUI {
     }
   }
 
-  /* sets all buttons, radio btn and text
-  * to their defualt values
-  */
+  /* sets all buttons, radio btn and text to their default values */
   setUp() {
     var i, x;
     for (i = 5; i < 25; i++) {
@@ -66,7 +69,7 @@ class Gripper_GUI {
     this.counter = 6;
   }
 
-  // dynamically prints out the goal platform selected
+  /* dynamically prints out the goal platform selected */
   updatePlatform(value) {
     var selected, platform, option;
     platform = "Platform ";
@@ -107,8 +110,10 @@ class Gripper_GUI {
     console.log("Creating child process");
     var path = process.cwd();
 
+    // this.child = execFile(
     this.child = exec(
-      this.command,
+      this.solver,
+      // [ "blocks_ASP_prog.lp", "init_config.inp", ">", "out.inp" ],
       {
         cwd: path + "/Clingo/",
         detached: false // want child process to be part of app
@@ -118,8 +123,9 @@ class Gripper_GUI {
           throw error;
         }
         console.log(stdout);
+        // execFile(
         exec(
-          "./parser",
+          this.parse,
           {
             cwd: path + "/Clingo/",
             detached: false

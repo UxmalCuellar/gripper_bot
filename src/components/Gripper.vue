@@ -81,7 +81,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h1 {
   font-size: 35px;
   text-align: center;
@@ -130,7 +130,7 @@ html {
 button {
   height: 60px;
   width: 70px;
-  background-color: #fff;
+  background-color: #6ecf42;
   font-size: 2rem;
   border-radius: 5px;
   /*border: 1px solid #c4c4c4;*/
@@ -147,7 +147,7 @@ button {
 }
 
 button:hover {
-  background-color: #6ecf42;
+  background-color: #2e81a9;
 }
 
 button:disabled {
@@ -158,7 +158,7 @@ button:disabled {
 .clear {
   background-color: #f0595f;
   border-color: #f3036e;
-  border-radius: 3px;
+  border-radius: 5px;
   color: #fff;
   height: 30px;
   width: 100px;
@@ -169,21 +169,17 @@ button:disabled {
   background-color: #f17377;
 }
 .solve {
-  background-color: #32b098;
+  background-color: #6ecf42;
   border-color: #337cac;
   color: #fff;
   height: 30px;
   width: 100px;
-  border-radius: 3px;
+  border-radius: 5px;
   font-size: 1rem;
 }
 
 .solve:hover {
-  background-color: #4e9ed4;
-}
-solve:disabled {
-  background-color: deeppink;
-  color: black;
+  background-color: #1eb714;
 }
 
 .button-keys {
@@ -192,8 +188,8 @@ solve:disabled {
   grid-column-gap: 33px;
   text-align: center;
   color: #ffba06;
-  /* background-color: grey; */
-  background-color: #fcfcfc;
+  border-radius: 10px;
+  background-color: #ffc93c;
   padding: 10px;
 }
 .goals {
