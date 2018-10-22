@@ -1,8 +1,13 @@
+import { exec } from "child_process";
+const execPath = "./clingo blocks_ASP_prog.lp init_config.inp > out.inp";
 class Gripper_GUI {
   constructor() {
     this.counter = 6;
     this.initStr = "";
     this.fs = require("fs");
+    this.command = execPath;
+    this.child = {}; // init as null object
+    this.running = false;
   }
 
   // enable button above selected button and concatnate 'block'
@@ -86,33 +91,72 @@ class Gripper_GUI {
         goal = document.getElementById("rb4").value;
 
       init_config = this.initStr + "goalPlatform(" + goal + ").";
-      this.fs.writeFile("./Clingo/instances.inp", init_config, function(err) {
+      this.fs.writeFile("./Clingo/init_config.inp", init_config, function(err) {
         if (err) throw err;
         console.log("Done writing.");
       });
       // execute solver and parser
-      // const { exec } = require("child_process");
-      // exec(
-      //   '"./clingo blocks_ASP_prog.lp instances.inp > out.inp"',
-      //   {
-      //     cwd: "./Clingo"
-      //   },
-      //   function(err, stdout) {
-      //     exec("./clingo/parser",
-      //     {
-      //       cwd: "./Clingo"
-      //     },
-      //     function(err, stdout) {
-      //       console.log(stdout);
-      //     });
-      //     console.log(stdout);
-      //     alert("Solver completed");
-      //   }
-      // );
+      this.runExecutables();
+      // reset blocks
+      this.resetBlocks();
     }
+  }
 
-    this.resetBlocks();
+  /* runs ASP_Solver and parser programs */
+  runExecutables() {
+    console.log("Creating child process");
+    var path = process.cwd();
+
+    this.child = exec(
+      this.command,
+      {
+        cwd: path + "/Clingo/",
+        detached: false // want child process to be part of app
+      },
+      (error, stdout) => {
+        if (error) {
+          throw error;
+        }
+        console.log(stdout);
+        exec(
+          "./parser",
+          {
+            cwd: path + "/Clingo/",
+            detached: false
+          },
+          (error, stdout) => {
+            if (error) {
+              throw error;
+            }
+            console.log(stdout);
+          }
+        );
+      }
+    );
+    console.log("'exec' successfully called!");
+
+    this.child.stdout.on("data", data => {
+      console.log(`data:\n${data}`);
+    });
+
+    this.child.stderr.on("data", data => {
+      console.log(`data:\n${data}`);
+    });
+
+    this.child.on("exit", code => {
+      console.log(`\nchild exited with code: ${code}`);
+    });
+  }
+
+  start() {
+    this.runExecutables();
+    this.running = true;
+  }
+
+  stop() {
+    this.child.kill("SIGINT");
+    console.log("bye from child.js");
+    this.running = false;
   }
 }
-
 export default Gripper_GUI;

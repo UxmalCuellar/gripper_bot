@@ -19,7 +19,7 @@ int main() {
     string space;
     string temp;
     string string1;
-    
+
     char chars[] = "(),";
     comma = ',';
     space = ' ';

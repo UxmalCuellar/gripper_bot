@@ -1,9 +1,9 @@
 <template>
   <div class="hello">
-  <h1>GripperBot</h1>
-      <p>Place the blocks.</p>
       <form name="gripperBot" action="/api/data" method="post">
         <div class="container">
+          <h1>GripperBot</h1>
+              <p>Place the blocks.</p>
           <div class="button-keys">
             <div class="col1"><button v-on:click="select($event)" id="21" type="button" value="6,1"></button></div>
             <div class="col2"><button v-on:click="select($event)" id="22" type="button" value="6,2"></button></div>
@@ -189,9 +189,12 @@ solve:disabled {
 .button-keys {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 40px;
+  grid-column-gap: 33px;
   text-align: center;
   color: #ffba06;
+  /* background-color: grey; */
+  background-color: #fcfcfc;
+  padding: 10px;
 }
 .goals {
   display: grid;
