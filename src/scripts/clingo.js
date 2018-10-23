@@ -1,13 +1,15 @@
-//import { app } from "electron";
+import { app, BrowserWindow } from "electron";
+let mainWindow = BrowserWindow.getFocusedWindow();
+// want to send from here to browser window
 
-var app = require("electron").remote.app;
+//var app = require("electron").remote.app;
 import { spawn } from "child_process";
 import path from "path";
 console.log("hello\n");
 const execPath = app.getAppPath() + "/../Clingo/clingo";
-const params = ["these", "are", "some", "params"];
+const params = ["blocks_ASP_prog.lp", "instances.inp"];
 
-class clingo {
+class Clingo {
   constructor() {
     this.execPath = execPath;
     this.params = params;
@@ -46,6 +48,7 @@ class clingo {
 
     this.child.on("exit", code => {
       console.log(`\nchild exited with code: ${code}`);
+      mainWindow.webContents.send("clingo-exit", code);
     });
   }
 
@@ -61,4 +64,4 @@ class clingo {
   }
 }
 
-export default clingo;
+export default Clingo;

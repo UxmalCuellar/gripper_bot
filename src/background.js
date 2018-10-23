@@ -1,7 +1,8 @@
 "use strict";
 global.__basedir = __dirname;
 
-import { app, protocol, BrowserWindow } from "electron";
+import Clingo from "./scripts/clingo";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -69,3 +70,16 @@ if (isDevelopment) {
     }
   });
 }
+
+// listening for events from renderr process
+// Attach listener in the main process with the given ID
+ipcMain.on("request-clingo", (event, arg) => {
+  let clingo = new Clingo();
+  clingo.start();
+  console.log(arg);
+});
+
+ipcMain.on("request-parser", (event, arg) => {
+  console.log("ready to parse\n");
+  console.log(arg);
+});
