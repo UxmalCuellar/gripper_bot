@@ -1,7 +1,7 @@
-initCellHasBlock(1,1,6).
-initCellHasBlock(2,1,5).
-initCellHasBlock(3,1,4).
-initCellHasBlock(4,1,3).
-initCellHasBlock(5,1,2).
-initCellHasBlock(6,1,1).
+initCellHasBlock(1,2,6).
+initCellHasBlock(1,3,5).
+initCellHasBlock(2,3,4).
+initCellHasBlock(2,2,3).
+initCellHasBlock(3,2,2).
+initCellHasBlock(3,3,1).
 goalPlatform(1).

@@ -1,28 +1,26 @@
 import { app } from "electron";
-import { eventEmitter } from "./eventEmitter";
-import fs from "fs";
+// let mainWindow = BrowserWindow.getFocusedWindow();
+// want to send from here to browser window
 
 //var app = require("electron").remote.app;
-import { spawn } from "child_process";
+import { eventEmitter } from "./eventEmitter";
+import { exec } from "child_process";
 import path from "path";
-const execPath = app.getAppPath() + "/../Clingo/clingo";
-const params = ["blocks_ASP_prog.lp", "instances.inp", "out.inp"];
+console.log("hello from parser.js\n");
+const execPath = app.getAppPath() + "/../Clingo/parser";
 
-class Clingo {
+class Parser {
   constructor() {
     this.execPath = execPath;
-    this.params = params;
     this.child = {}; // init as null object
     this.running = false;
     console.log("path " + path.dirname(process.execPath));
-    console.log("clingo path: " + execPath);
+    console.log("parser path: " + execPath);
   }
 
   startChild() {
-    //let self = this;
-    this.child = spawn(
+    this.child = exec(
       execPath,
-      params,
       {
         cwd: app.getAppPath() + "/../Clingo/",
         detached: true,
@@ -36,10 +34,7 @@ class Clingo {
         console.log(stdout);
       }
     );
-    this.child.unref();
-
-    var access = fs.createWriteStream(`${app.getAppPath()}/../Clingo/out.inp`);
-    this.child.stdout.pipe(access);
+    // this.child.unref();
 
     this.child.stdout.on("data", data => {
       console.log(`data:\n${data}`);
@@ -48,10 +43,9 @@ class Clingo {
     this.child.stderr.on("data", data => {
       console.log(`data:\n${data}`);
     });
-
     this.child.on("exit", code => {
       console.log(`\nchild exited with code: ${code}`);
-      eventEmitter.emit("clingo-finished", code);
+      eventEmitter.emit("parser-finished", code);
     });
   }
 
@@ -67,4 +61,4 @@ class Clingo {
   }
 }
 
-export default Clingo;
+export default Parser;
