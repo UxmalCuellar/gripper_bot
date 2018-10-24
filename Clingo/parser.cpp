@@ -19,7 +19,7 @@ int main() {
     string space;
     string temp;
     string string1;
-    
+
     char chars[] = "(),";
     comma = ',';
     space = ' ';
@@ -66,17 +66,16 @@ int main() {
                 for (int i = 0; i < strlen(chars); ++i) {
                     string1.erase(remove(string1.begin(), string1.end(), chars[i]), string1.end());
                 }
-                // add commas and spaces
-                string1.insert(1,comma);
+                // add spaces
+                string1.insert(0,space);
                 string1.insert(3,space);
-                string1.insert(5,comma);
                 // insert into map actions
                 actions.insert(pair<int, string>(key, string1));
             }
         }
         //print to file
         for (int j = 0; j < actions.size(); ++j) {
-            fout << actions.at(j)<< endl;
+            fout << actions.at(j);
         }
         fin.close();
         fout.close();
