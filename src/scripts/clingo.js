@@ -1,6 +1,5 @@
-import { app, BrowserWindow } from "electron";
-let mainWindow = BrowserWindow.getFocusedWindow();
-// want to send from here to browser window
+import { app } from "electron";
+import { eventEmitter } from "./eventEmitter";
 
 //var app = require("electron").remote.app;
 import { spawn } from "child_process";
@@ -20,6 +19,7 @@ class Clingo {
   }
 
   startChild() {
+    //let self = this;
     this.child = spawn(
       execPath,
       params,
@@ -48,7 +48,7 @@ class Clingo {
 
     this.child.on("exit", code => {
       console.log(`\nchild exited with code: ${code}`);
-      mainWindow.webContents.send("clingo-exit", code);
+      eventEmitter.emit("clingo-finished", code);
     });
   }
 

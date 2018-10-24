@@ -104,7 +104,7 @@ class Gripper_GUI {
       ipcRenderer.send("request-clingo", Data);
 
       // Listen for main message
-      ipcRenderer.on("ping", (event, arg) => {
+      ipcRenderer.on("clingo-finished", (event, arg) => {
         console.log("exit code from clingo to render process: " + arg);
         // Invoke method directly on main process
         alert("Solver completed");
