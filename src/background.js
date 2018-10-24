@@ -2,6 +2,7 @@
 global.__basedir = __dirname;
 
 import Clingo from "./scripts/clingo";
+import Parser from "./scripts/parser";
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
@@ -17,7 +18,11 @@ let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ width: 600, height: 800 });
+  win = new BrowserWindow({
+    width: 600,
+    height: 800,
+    icon: __dirname + "/../src/assets/icon.png"
+  });
 
   if (isDevelopment) {
     // Load the url of the dev server if in development mode
@@ -81,5 +86,7 @@ ipcMain.on("request-clingo", (event, arg) => {
 
 ipcMain.on("request-parser", (event, arg) => {
   console.log("ready to parse\n");
+  let parse = new Parser();
+  parse.start();
   console.log(arg);
 });

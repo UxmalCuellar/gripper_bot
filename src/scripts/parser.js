@@ -5,18 +5,16 @@ import { app } from "electron";
 //var app = require("electron").remote.app;
 import { execSync } from "child_process";
 import path from "path";
-console.log("hello from clingo.js\n");
-const execPath =
-  app.getAppPath() +
-  "/../Clingo/clingo blocks_ASP_prog.lp instances.inp > out.inp";
+console.log("hello from parser.js\n");
+const execPath = app.getAppPath() + "/../Clingo/parser";
 
-class Clingo {
+class Parser {
   constructor() {
     this.execPath = execPath;
     this.child = {}; // init as null object
     this.running = false;
     console.log("path " + path.dirname(process.execPath));
-    console.log("clingo path: " + execPath);
+    console.log("parser path: " + execPath);
   }
 
   startChild() {
@@ -44,9 +42,10 @@ class Clingo {
     this.child.stderr.on("data", data => {
       console.log(`data:\n${data}`);
     });
+
     this.child.on("exit", code => {
       console.log(`\nchild exited with code: ${code}`);
-      self.eventListener.sender.send("clingo-finished", code);
+      // mainWindow.webContents.send("clingo-exit", code);
     });
   }
 
@@ -62,4 +61,4 @@ class Clingo {
   }
 }
 
-export default Clingo;
+export default Parser;
