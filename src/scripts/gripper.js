@@ -1,15 +1,9 @@
-// import { execFile } from "child_process";
-import { exec } from "child_process";
-// const command1 = "clingo";
-const command1 = "./clingo blocks_ASP_prog.lp init_config.inp > out.inp";
-const command2 = "./parser";
+const { ipcRenderer } = require("electron");
 class Gripper_GUI {
   constructor() {
     this.counter = 6;
     this.initStr = "";
     this.fs = require("fs");
-    this.solver = command1;
-    this.parse = command2;
     this.child = {}; // init as null object
     this.running = false;
   }
@@ -98,71 +92,31 @@ class Gripper_GUI {
         if (err) throw err;
         console.log("Done writing.");
       });
-      // execute solver and parser
-      this.runExecutables();
-      // reset blocks
-      this.resetBlocks();
+      console.log("Solver starting...");
+      //todo ipc call
+      let Data = {
+        message: "from render process",
+        someData: "go solve"
+      };
+
+      // Send information to the main process
+      // if a listener has been set, then the main process
+      // will react to the request !
+      ipcRenderer.send("request-clingo", Data);
+
+      // Listen for main message
+      // ipcRenderer.on("ping", (event, arg) => {
+      //   console.log("exit code from clingo to render process: " + arg);
+      //   // Invoke method directly on main process
+      console.log("Solver completed");
+      Data = {
+        message: "from render process",
+        someData: "go parse"
+      };
+
+      ipcRenderer.send("request-parser", Data);
+      // });
     }
-  }
-
-  /* runs ASP_Solver and parser programs */
-  runExecutables() {
-    console.log("Creating child process");
-    var path = process.cwd();
-
-    // this.child = execFile(
-    this.child = exec(
-      this.solver,
-      // [ "blocks_ASP_prog.lp", "init_config.inp", ">", "out.inp" ],
-      {
-        cwd: path + "/Clingo/",
-        detached: false // want child process to be part of app
-      },
-      (error, stdout) => {
-        if (error) {
-          throw error;
-        }
-        console.log(stdout);
-        // execFile(
-        exec(
-          this.parse,
-          {
-            cwd: path + "/Clingo/",
-            detached: false
-          },
-          (error, stdout) => {
-            if (error) {
-              throw error;
-            }
-            console.log(stdout);
-          }
-        );
-      }
-    );
-    console.log("'exec' successfully called!");
-
-    this.child.stdout.on("data", data => {
-      console.log(`data:\n${data}`);
-    });
-
-    this.child.stderr.on("data", data => {
-      console.log(`data:\n${data}`);
-    });
-
-    this.child.on("exit", code => {
-      console.log(`\nchild exited with code: ${code}`);
-    });
-  }
-
-  start() {
-    this.runExecutables();
-    this.running = true;
-  }
-
-  stop() {
-    this.child.kill("SIGINT");
-    console.log("bye from child.js");
-    this.running = false;
   }
 }
 export default Gripper_GUI;

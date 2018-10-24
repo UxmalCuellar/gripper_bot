@@ -1,6 +1,9 @@
 "use strict";
+global.__basedir = __dirname;
 
-import { app, protocol, BrowserWindow } from "electron";
+import Clingo from "./scripts/clingo";
+import Parser from "./scripts/parser";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -15,7 +18,11 @@ let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ width: 500, height: 750 });
+  win = new BrowserWindow({
+    width: 600,
+    height: 800,
+    icon: __dirname + "/../src/assets/icon.png"
+  });
 
   if (isDevelopment) {
     // Load the url of the dev server if in development mode
@@ -68,3 +75,18 @@ if (isDevelopment) {
     }
   });
 }
+
+// listening for events from renderr process
+// Attach listener in the main process with the given ID
+ipcMain.on("request-clingo", (event, arg) => {
+  let clingo = new Clingo();
+  clingo.start();
+  console.log(arg);
+});
+
+ipcMain.on("request-parser", (event, arg) => {
+  console.log("ready to parse\n");
+  let parse = new Parser();
+  parse.start();
+  console.log(arg);
+});
