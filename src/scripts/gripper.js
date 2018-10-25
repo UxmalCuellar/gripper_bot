@@ -1,3 +1,4 @@
+const { ipcRenderer } = require("electron");
 class Gripper_GUI {
   constructor() {
     this.counter = 6;
@@ -90,25 +91,30 @@ class Gripper_GUI {
         if (err) throw err;
         console.log("Done writing.");
       });
-      // execute solver and parser
-      // const { exec } = require("child_process");
-      // exec(
-      //   '"./clingo blocks_ASP_prog.lp instances.inp > out.inp"',
-      //   {
-      //     cwd: "./Clingo"
-      //   },
-      //   function(err, stdout) {
-      //     exec("./clingo/parser",
-      //     {
-      //       cwd: "./Clingo"
-      //     },
-      //     function(err, stdout) {
-      //       console.log(stdout);
-      //     });
-      //     console.log(stdout);
-      //     alert("Solver completed");
-      //   }
-      // );
+      alert("Solver starting...");
+      //todo ipc call
+      let Data = {
+        message: "from render process",
+        someData: "go solve"
+      };
+
+      // Send information to the main process
+      // if a listener has been set, then the main process
+      // will react to the request !
+      ipcRenderer.send("request-clingo", Data);
+
+      // Listen for main message
+      ipcRenderer.on("clingo-finished", (event, arg) => {
+        console.log("exit code from clingo to render process: " + arg);
+        // Invoke method directly on main process
+        alert("Solver completed");
+        Data = {
+          message: "from render process",
+          someData: "go parse"
+        };
+
+        ipcRenderer.send("request-parser", Data);
+      });
     }
 
     this.resetBlocks();
