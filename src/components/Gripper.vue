@@ -45,6 +45,7 @@
             <button type="button" class="solve" v-on:click="executeSolver()" id="solve">Solve</button>
             <button type="button" class="clear" v-on:click="resetBlocks()"  value="clear">Reset</button>
           </div>
+          <div class="statusText"><p type="" id="status">Platform 1 selected</p></div>
         </div>
       </form>
   </div>

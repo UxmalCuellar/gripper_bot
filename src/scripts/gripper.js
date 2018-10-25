@@ -91,6 +91,10 @@ class Gripper_GUI {
         if (err) throw err;
         console.log("Done writing.");
       });
+      this.fs.truncate("./Clingo/out.inp", 0, function(err) {
+        if (err) throw err;
+        console.log("Gripper: cleaned out.inp");
+      });
       alert("Solver starting...");
       //todo ipc call
       let Data = {

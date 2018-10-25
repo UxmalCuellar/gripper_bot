@@ -10,17 +10,18 @@ var fs = require("fs");
 var emitter = new EventEmitter();
 
 emitter.on("clingo-finished", arg => {
-  console.log("from emitter - clingo exit with code: " + arg);
+  console.log("Emitter: clingo exit with code: " + arg);
   let parser = new Parser();
   parser.start();
 });
 
 emitter.on("parser-finished", arg => {
-  console.log("from emitter - parser exit with code: " + arg);
+  console.log("Emitter: parser exit with code: " + arg);
 
   // clear out.inp
   fs.truncate(`${app.getAppPath()} + /../Clingo/out.inp`, 0, function() {
     console.log("out.inp cleaned");
+    console.log(app.getAppPath());
   });
 });
 
