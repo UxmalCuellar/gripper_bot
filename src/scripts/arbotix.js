@@ -1,13 +1,11 @@
 import { app } from "electron";
-import { eventEmitter } from "./eventEmitter";
-
-//var app = require("electron").remote.app;
-import { spawn } from "child_process";
+var kill = require("tree-kill");
+import { exec } from "child_process";
 import path from "path";
 const execPath = app.getAppPath() + "/../Clingo/clingo";
 const params = ["blocks_ASP_prog.lp", "instances.inp", "out.inp"];
 
-class Gripper {
+class Arbotix {
   constructor() {
     this.execPath = execPath;
     this.params = params;
@@ -17,15 +15,15 @@ class Gripper {
     console.log("clingo path: " + execPath);
   }
 
-  startChild(argv) {
-    //let self = this;
-    let command = "rosrun";
-    let args = ["px_test", "test_node", argv];
-    this.child = spawn(
+  startChild() {
+    let command = [
+      "/opt/ros/kinetic/bin/roslaunch",
+      "arbotix_python",
+      "phantomX_arm.launch"
+    ];
+    this.child = exec(
       command,
-      args,
       {
-        cwd: "/opt/ros/kinetic/bin/",
         detached: true
       },
       (error, stdout) => {
@@ -35,7 +33,6 @@ class Gripper {
         console.log(stdout);
       }
     );
-    this.child.unref();
 
     this.child.stdout.on("data", data => {
       console.log(`data:\n${data}`);
@@ -47,20 +44,19 @@ class Gripper {
 
     this.child.on("exit", code => {
       console.log(`\nchild exited with code: ${code}`);
-      eventEmitter.emit("gripper-finished", code);
     });
   }
 
-  start(argv) {
-    this.startChild(argv);
+  start() {
+    this.startChild();
     this.running = true;
   }
 
   stop() {
-    this.child.kill("SIGINT");
-    console.log("bye from child.js");
+    kill(this.child.pid);
+    console.log("bye from arbotix.js");
     this.running = false;
   }
 }
 
-export default Gripper;
+export default Arbotix;
