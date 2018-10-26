@@ -1,15 +1,16 @@
 import { app } from "electron";
-var kill = require("tree-kill");
 import { exec } from "child_process";
 import path from "path";
+
 const execPath = app.getAppPath() + "/../Clingo/clingo";
 const params = ["blocks_ASP_prog.lp", "instances.inp", "out.inp"];
+var kill = require("tree-kill");
 
 class Arbotix {
   constructor() {
     this.execPath = execPath;
     this.params = params;
-    this.child = {}; // init as null object
+    this.child = {};
     this.running = false;
     console.log("path " + path.dirname(process.execPath));
     console.log("clingo path: " + execPath);
