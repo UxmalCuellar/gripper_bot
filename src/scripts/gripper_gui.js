@@ -16,7 +16,7 @@ class Gripper_GUI {
         document.getElementById(id).style.background = "#7AB317";
         document.getElementById(id).style.color = "#A0C55F";
 
-        initCell = "initCellHasBlock(";
+        initCell = "initCellHasBlock("; // row, col, block No.
         this.initStr =
           this.initStr +
           initCell +
@@ -56,21 +56,22 @@ class Gripper_GUI {
       document.getElementById(x).innerHTML = "";
       document.getElementById(x).style.background = "transparent";
     }
+
     this.setUp();
     document.getElementById("platform").innerHTML = "Platform 1 selected.";
     this.initStr = "";
     this.counter = 6;
   }
 
-  /* dynamically prints out the goal platform selected */
+  // dynamically prints out the goal platform selected
   updatePlatform(value) {
     var selected, platform, option;
     platform = "Platform ";
     selected = " selected.";
     option = platform + value + selected;
+
     document.getElementById("platform").innerHTML = option;
   }
-
   /* checks if 6 buttons have been pressed then appends goal state to 
    * inital config string which is then written to 'instances.inp'.
    * out.inp is clear of its contents and solver and parser are started
@@ -89,7 +90,7 @@ class Gripper_GUI {
         goal = document.getElementById("rb3").value;
       if (document.getElementById("rb4").checked)
         goal = document.getElementById("rb4").value;
-      // write to instances.inp
+
       init_config = this.initStr + "goalPlatform(" + goal + ").";
       this.fs.writeFile("./Clingo/instances.inp", init_config, function(err) {
         if (err) throw err;
@@ -114,17 +115,17 @@ class Gripper_GUI {
       // Listen for main message
       ipcRenderer.on("clingo-finished", (event, arg) => {
         console.log("exit code from clingo to render process: " + arg);
+        
         // Invoke method directly on main process
-       
         Data = {
           message: "from render process",
           someData: "go parse"
         };
-
         ipcRenderer.send("request-parser", Data);
       });
     }
-    this.resetBlocks();
+//     this.resetBlocks();
   }
 }
+
 export default Gripper_GUI;
