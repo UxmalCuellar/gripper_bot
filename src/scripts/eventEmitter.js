@@ -26,29 +26,11 @@ emitter.on("parser-finished", arg => {
   console.log("args: " + argv);
   let gripper = new Gripper();
   gripper.start(argv);
-  //  let command = "./gripper_zero";
-  //  let proc = exec(
-  //    command,
-  //    {
-  //      cwd: "/home/luken/px/scripts/"
-  //    },
-  //    (error, stdout) => {
-  //      if (error) {
-  //        throw error;
-  //      }
-  //      console.log(stdout);
-  //    }
-  //  );
-
-  //  proc.on("exit", code => {
-  //    console.log(`\nros script exited with code: ${code}`);
-  //  });
 });
 
 emitter.on("gripper-finished", arg => {
   console.log("from emitter - gripper exit with code: " + arg);
 
-  // clear out.inp
   fs.truncate(`${app.getAppPath()}/../Clingo/out.inp`, 0, function() {
     console.log("out.inp cleaned");
   });
