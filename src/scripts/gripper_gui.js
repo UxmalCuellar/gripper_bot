@@ -91,7 +91,11 @@ class Gripper_GUI {
         if (err) throw err;
         console.log("Done writing.");
       });
-      alert("Solver starting...");
+      // clear out.inp file
+      this.fs.truncate("./Clingo/out.inp", 0, function(err) {
+        if (err) throw err;
+        console.log("Gripper: cleaned out.inp");
+      });
       //todo ipc call
       let Data = {
         message: "from render process",
@@ -107,7 +111,7 @@ class Gripper_GUI {
       ipcRenderer.on("clingo-finished", (event, arg) => {
         console.log("exit code from clingo to render process: " + arg);
         // Invoke method directly on main process
-        alert("Solver completed");
+       
         Data = {
           message: "from render process",
           someData: "go parse"
