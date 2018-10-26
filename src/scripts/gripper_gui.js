@@ -6,8 +6,8 @@ class Gripper_GUI {
     this.fs = require("fs");
   }
 
-  // enable button above selected button and concatnate 'block'
-  // placment to string
+  // colorize selected button(block) and enable button above selected 
+  // button then append block position to string
   addBlock(id) {
     var num, str, initCell;
     if (this.counter > 0) {
@@ -16,7 +16,7 @@ class Gripper_GUI {
         document.getElementById(id).style.background = "#7AB317";
         document.getElementById(id).style.color = "#A0C55F";
 
-        initCell = "initCellHasBlock("; // row, col, block No.
+        initCell = "initCellHasBlock(";
         this.initStr =
           this.initStr +
           initCell +
@@ -36,9 +36,8 @@ class Gripper_GUI {
     }
   }
 
-  /* sets all buttons, radio btn and text
-  * to their defualt values
-  */
+  // sets all buttons, radio btn and to their default 
+  // state i.e disable/enabled
   setUp() {
     var i, x;
     for (i = 5; i < 25; i++) {
@@ -48,6 +47,8 @@ class Gripper_GUI {
     document.getElementById("rb1").checked = true;
   }
 
+  // resets blocks, initial config string, radio btn and 
+  // text to their default value
   resetBlocks() {
     var i, x;
     for (i = 1; i < 25; i++) {
@@ -55,23 +56,26 @@ class Gripper_GUI {
       document.getElementById(x).innerHTML = "";
       document.getElementById(x).style.background = "transparent";
     }
-
     this.setUp();
     document.getElementById("platform").innerHTML = "Platform 1 selected.";
     this.initStr = "";
     this.counter = 6;
   }
 
-  // dynamically prints out the goal platform selected
+  /* dynamically prints out the goal platform selected */
   updatePlatform(value) {
     var selected, platform, option;
     platform = "Platform ";
     selected = " selected.";
     option = platform + value + selected;
-
     document.getElementById("platform").innerHTML = option;
   }
 
+  /* checks if 6 buttons have been pressed then appends goal state to 
+   * inital config string which is then written to 'instances.inp'.
+   * out.inp is clear of its contents and solver and parser are started
+   * sequentially and buttons are rest.
+   */
   executeSolver() {
     var init_config, goal;
     if (this.counter > 0) {
@@ -85,7 +89,7 @@ class Gripper_GUI {
         goal = document.getElementById("rb3").value;
       if (document.getElementById("rb4").checked)
         goal = document.getElementById("rb4").value;
-
+      // write to instances.inp
       init_config = this.initStr + "goalPlatform(" + goal + ").";
       this.fs.writeFile("./Clingo/instances.inp", init_config, function(err) {
         if (err) throw err;
@@ -120,9 +124,7 @@ class Gripper_GUI {
         ipcRenderer.send("request-parser", Data);
       });
     }
-
     this.resetBlocks();
   }
 }
-
 export default Gripper_GUI;
