@@ -1,10 +1,11 @@
 import { app } from "electron";
 import { eventEmitter } from "./eventEmitter";
 import fs from "fs";
-
-//var app = require("electron").remote.app;
 import { spawn } from "child_process";
 import path from "path";
+/*
+ * executes clingo solver executable with args when called
+ */
 const execPath = app.getAppPath() + "/../Clingo/clingo";
 const params = ["blocks_ASP_prog.lp", "instances.inp", "out.inp"];
 
@@ -19,7 +20,6 @@ class Clingo {
   }
 
   startChild() {
-    //let self = this;
     this.child = spawn(
       execPath,
       params,
