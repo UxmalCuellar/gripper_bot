@@ -51,12 +51,11 @@
 </template>
 
 <script>
-import Gripper_GUI from "@/scripts/gripper.js";
+import Gripper_GUI from "@/scripts/gripper_gui.js";
 export default {
   name: "Gripper",
   props: {},
   mounted() {
-    //Gripper_GUI.setUp();
     this.gripper = new Gripper_GUI();
     this.gripper.setUp();
   },

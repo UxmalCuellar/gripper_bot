@@ -2,6 +2,7 @@
 global.__basedir = __dirname;
 
 import Clingo from "./scripts/clingo";
+import { spawn } from "child_process";
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
@@ -33,6 +34,23 @@ function createWindow() {
     win = null;
   });
 }
+
+let command = "/opt/ros/kinetic/bin/roslaunch";
+let args = ["arbotix_python", "phantomX_arm.launch"];
+spawn(
+  command,
+  args,
+  {
+    env: { DISPLAY: process.env.DISPLAY },
+    stdio: ["pipe", "pipe", "pipe"]
+  },
+  (error, stdout) => {
+    if (error) {
+      throw error;
+    }
+    console.log(stdout);
+  }
+);
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
