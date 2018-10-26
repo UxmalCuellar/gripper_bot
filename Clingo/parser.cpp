@@ -19,15 +19,18 @@ int main() {
     string space;
     string temp;
     string string1;
+    bool solution_found;
+    string exitMsg;
 
     char chars[] = "(),";
     comma = ',';
     space = ' ';
-    unsatisfiable = "UNSATISFIABLE";
+    unsatisfiable = "UNKNOWN";
     moveCell = "moveCellCell";
     rawFile = "out.inp";
     parsed = "parsed.txt";
-
+    solution_found = true;
+    exitMsg = "Parser: Parsing completed.";
     //create and open 2 files for reading and writing
     ifstream fin;
     ofstream fout;
@@ -36,12 +39,12 @@ int main() {
 
     // error handling
     if (fin.fail()) {
-        cout << "Failed to open.\n";
+        cout << "Parser: Failed to open " << rawFile << ".\n";
         exit(1);
     }
     fout.open(parsed);
     if (fout.fail()) {
-        cout << "Failed to create file.\n";
+        cout << "Parser: Failed to open " << parsed << ".\n";
         exit(1);
     }
 // reads inp file and extracts data from lines with 'moveCellCell' function
@@ -51,9 +54,11 @@ int main() {
     if (fin.is_open() && fout.is_open()) {
         while(fin >> word) {
             if (word.compare(unsatisfiable) == 0) {
-                cout << unsatisfiable;
+                exitMsg = "Parser: Solution Not Found";
+                solution_found = false;
+                fout << "";
                 break;
-            }
+            } else {
             if (word.compare(0, 12, moveCell) == 0) {
                 temp = word.erase(0, 12);
                 //find first comma
@@ -72,14 +77,17 @@ int main() {
                 // insert into map actions
                 actions.insert(pair<int, string>(key, string1));
             }
+          }
         }
         //print to file
-        for (int j = 0; j < actions.size(); ++j) {
+        if (solution_found) {
+          for (int j = 0; j < actions.size(); ++j) {
             fout << actions.at(j);
+          }
         }
         fin.close();
         fout.close();
     }
-    cout << "Parsing completed." << endl;
+    cout << exitMsg << endl;
     return 0;
 }
