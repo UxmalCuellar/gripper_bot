@@ -79,7 +79,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
   font-size: 35px;
@@ -108,7 +107,6 @@ html {
   box-sizing: inherit;
 }
 .container {
-  /*  border: px solid #ccc;*/
   border-radius: 5px;
   position: absolute;
   top: 50%;
@@ -132,17 +130,14 @@ button {
   background-color: #fff;
   font-size: 2rem;
   border-radius: 5px;
-  /*border: 1px solid #c4c4c4;*/
   border: none;
   background-color: transparent;
-  /*color: #333;*/
   background-image: linear-gradient(
     to bottom,
     transparent,
     transparent 50%,
     rgba(0, 0, 0, 0.08)
   );
-  /*box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05), inset 0 1px 0 0 rgba(255, 255, 255, .45), inset 0 -1px 0 0 rgba(255, 255, 255, .15), 0 1px 0 0 rgba(255, 255, 255, .15);*/
 }
 
 button:hover {
