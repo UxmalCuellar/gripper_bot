@@ -1,9 +1,8 @@
 import { app } from "electron";
 import { eventEmitter } from "./eventEmitter";
-
-//var app = require("electron").remote.app;
 import { spawn } from "child_process";
 import path from "path";
+
 const execPath = app.getAppPath() + "/../Clingo/clingo";
 const params = ["blocks_ASP_prog.lp", "instances.inp", "out.inp"];
 
@@ -11,14 +10,13 @@ class Gripper {
   constructor() {
     this.execPath = execPath;
     this.params = params;
-    this.child = {}; // init as null object
+    this.child = {};
     this.running = false;
     console.log("path " + path.dirname(process.execPath));
     console.log("clingo path: " + execPath);
   }
 
   startChild(argv) {
-    //let self = this;
     let command = "rosrun";
     let args = ["px_test", "test_node", argv];
     this.child = spawn(
